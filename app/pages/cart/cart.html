@@ -1,0 +1,40 @@
+<!--
+  Generated template for the CartPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar primary>
+    <ion-title>Keranjang</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="cartProducts==null">
+    <ion-title style="text-align:center">-- Keranjang Kosong --</ion-title>
+  </div>
+  <div *ngIf="cartProducts!=null">
+    <ion-list>
+      <ion-item *ngFor="let i of cartProducts">
+        <ion-avatar item-left>
+          <img [src]="i.photo">
+        </ion-avatar>
+        <h2>{{i.name}}</h2>
+        <p>Rp. {{i.price}}</p>
+        <p>Qty {{i.qty}}</p>
+      </ion-item>
+    
+    </ion-list>
+
+    <ion-buttons>
+      <button danger (click)="clearCart()">Clear</button>
+      <button primary (click)="gotoOrder()" style="float:right">Next</button>
+    </ion-buttons>
+  </div>
+  
+  
+  
+</ion-content>

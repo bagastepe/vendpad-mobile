@@ -1,0 +1,104 @@
+<!--
+  Generated template for the ProductsPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>PRODUCTS</ion-title>
+    <ion-buttons end>
+      <button (click)="toggleSearch($event)">
+        <ion-icon name='search'></ion-icon>
+      </button>
+      <button  (click)=gotoCart()>
+        <ion-icon name='cart'></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar primary>
+    <ion-searchbar *ngIf="searchVisible"
+      [(ngModel)]="myInput"
+      [showCancelButton]="shouldShowCancel"
+      (ionInput)="onInputSearch($event)"
+      (ionCancel)="onCancelSearch($event)"
+      (search)="onInputSearch($event)"
+      debounce=1500>
+    </ion-searchbar> 
+    
+    <ion-row>
+    <ion-col width-50>
+      <ion-item class="item-toolbar">
+        <!--<ion-label *ngIf="category">{{category.name}}</ion-label>-->
+        <ion-label>Category</ion-label>
+        <ion-select [(ngModel)]="category" (ionChange)="categoryProduct($event)">
+          <ion-option value="all" selected="true">All</ion-option>
+          <ion-option *ngFor="let c of categories" [value]="c.keyword_id">{{c.keyword_name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col width-50>    
+      <ion-item class="item-toolbar">
+        <!--<ion-label *ngIf="sort">{{sort}}</ion-label>-->
+        <ion-label>Sort By</ion-label>
+        <ion-select [(ngModel)]="sort" (ionChange)="sortProduct($event)">
+          <ion-option value="latest">Latest</ion-option>
+          <ion-option value="cheapest">Cheapest</ion-option>
+          <ion-option value="expensive">Expensive</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    </ion-row>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>  
+<ion-title style="height:50px;text-align:center">Product Lists</ion-title>
+<ion-list>
+  <ion-row wrap class="nopadding">
+    <ion-col width-50 *ngFor="let p of products">
+      <ion-card  (click)="gotoDetail(p)" class="card-product">
+        <img [src]="p.photo"/>
+        <ion-card-content>
+          <ion-card-title>
+            {{p.name}}
+          </ion-card-title>
+          <!--<p>
+            {{p.description}}
+          </p>-->
+          <p>
+            Rp {{p.price}}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>  
+  
+  </ion-row>
+  
+</ion-list>
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="canLoad" class="infinite-scroll">
+  <div class="loading">
+   <!--<svg width='42px' height='42px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-ring"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="50" cy="50" r="40" stroke-dasharray="163.36281798666926 87.9645943005142" stroke="#387ef5" fill="none" stroke-width="20"><animateTransform attributeName="transform" type="rotate" values="0 50 50;180 50 50;360 50 50;" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite" begin="0s"></animateTransform></circle></svg>-->
+   <div class="sk-circle">
+      <div class="sk-circle1 sk-child"></div>
+      <div class="sk-circle2 sk-child"></div>
+      <div class="sk-circle3 sk-child"></div>
+      <div class="sk-circle4 sk-child"></div>
+      <div class="sk-circle5 sk-child"></div>
+      <div class="sk-circle6 sk-child"></div>
+      <div class="sk-circle7 sk-child"></div>
+      <div class="sk-circle8 sk-child"></div>
+      <div class="sk-circle9 sk-child"></div>
+      <div class="sk-circle10 sk-child"></div>
+      <div class="sk-circle11 sk-child"></div>
+      <div class="sk-circle12 sk-child"></div>
+    </div>
+  </div>
+ </ion-infinite-scroll>
+</ion-content>
