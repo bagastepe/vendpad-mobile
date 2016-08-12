@@ -13,18 +13,20 @@
 </ion-header>
 
 <ion-content padding>
-  <div *ngIf="cartProducts==null">
+  <div *ngIf="cartProducts && cartProducts.length==0">
     <ion-title style="text-align:center">-- Keranjang Kosong --</ion-title>
   </div>
-  <div *ngIf="cartProducts!=null">
+  <div *ngIf="cartProducts && cartProducts.length>0">
     <ion-list>
       <ion-item *ngFor="let i of cartProducts">
         <ion-avatar item-left>
-          <img [src]="i.photo">
+          <img [src]="i.product_img">
         </ion-avatar>
-        <h2>{{i.name}}</h2>
-        <p>Rp. {{i.price}}</p>
-        <p>Qty {{i.qty}}</p>
+        <h2>{{i.product_name}}</h2>
+        <p>Rp. {{i.product_price}}</p>
+        <p>Qty : </p> <input type="number" [(ngModel)]="i.product_qty" (change)="testChange(i)"/>
+        
+        <button (click)="delete(i.product_id)" outline danger item-right><ion-icon name="trash"></ion-icon></button>
       </ion-item>
     
     </ion-list>

@@ -35,7 +35,7 @@ export class Data {
       
       if(isAlreadyAdded==false){
         console.log("not already added")
-        this.temp.push({id:product.id,name:product.name,photo:product.photo,price:product.price,qty:1})
+        this.temp.push({product_id:product.id,product_name:product.name,product_img:product.photo,product_price:product.price,product_qty:1})
 
       }
 
@@ -47,6 +47,27 @@ export class Data {
 
   clearCart(){
     this.temp=[];
+  }
+
+  delete(id){
+    return new Promise(resolve=>{
+      this.local.get('cart').then((data)=>{
+        this.temp = JSON.parse(data)
+        console.log("before delete: "+this.temp)
+        console.log(this.temp)
+        for(let pr of this.temp){
+            console.log("loop :"+pr.product_id)
+            if(pr.product_id==id){
+              console.log("id "+id)
+              var index = this.temp.indexOf(id);
+              this.temp.splice(index,1);
+            }
+        }
+        console.log("after delete: "+this.temp)      
+        this.local.set('cart',JSON.stringify(this.temp))
+        resolve(true)
+      })
+    })
   }
 
 

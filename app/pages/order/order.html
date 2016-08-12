@@ -15,50 +15,70 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-group>
-      <ion-item-divider secondary>Customer Info</ion-item-divider>
-      <ion-item>
-        <ion-label floating>Email*</ion-label>
-        <ion-input type="email" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Nama*</ion-label>
-        <ion-input type="text" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Phone/SMS*</ion-label>
-        <ion-input type="number" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Whatsapp</ion-label>
-        <ion-input type="number" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Line</ion-label>
-        <ion-input type="number" required></ion-input>
-      </ion-item>
-      <br>
-    </ion-item-group>
-    <ion-item-group>
-      <ion-item-divider secondary>Delivery Info</ion-item-divider>
-      <ion-item>
-        <ion-label floating>Atas Nama*</ion-label>
-        <ion-input type="text" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Phone/SMS*</ion-label>
-        <ion-input type="number" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Delivery Address*</ion-label>
-        <ion-textarea rows="4" type="text" required></ion-textarea>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Note</ion-label>
-        <ion-textarea rows="4" type="text"></ion-textarea>
-      </ion-item>
-      <br>
-    </ion-item-group>
-    <button style="float:right;margin-right:10px;margin-bottom:10px;">Order</button>
+    <form action="">
+      <ion-item-group>
+        <ion-item-divider secondary>Customer Info</ion-item-divider>
+        <ion-item>
+          <ion-label floating>Email*</ion-label>
+          <ion-input type="email" [(ngModel)]="customer.email" name="customer_email" #email="ngModel" required></ion-input>
+        </ion-item>
+        <ion-item [hidden]="email.valid||email.pristine">
+          <p>error Costumer email is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Nama*</ion-label>
+          <ion-input type="text" [(ngModel)]="customer.name" name="customer_name" #cname="ngModel" required></ion-input>
+        </ion-item>
+        <ion-item [hidden]="cname.valid||cname.pristine">
+          <p>error customer Name is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Phone/SMS*</ion-label>
+          <ion-input type="number" [(ngModel)]="customer.phone" name="customer_phone" #cphone="ngModel" required></ion-input>
+        </ion-item>
+        <ion-item [hidden]="cphone.valid||cphone.pristine">
+          <p>error Customer phone is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Whatsapp</ion-label>
+          <ion-input type="text" [(ngModel)]="customer.wa" name="customer_wa"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Line</ion-label>
+          <ion-input type="text" [(ngModel)]="customer.line" name="customer_line"></ion-input>
+        </ion-item>
+        <br>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider secondary>Delivery Info</ion-item-divider>
+        <ion-item>
+          <ion-label floating>Atas Nama*</ion-label>
+          <ion-input type="text" required [(ngModel)]="delivery.name" name="delivery_from_name" #dname="ngModel"></ion-input>
+        </ion-item>
+        <ion-item [hidden]="dname.valid||dname.pristine">
+          <p>error delivery name is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Phone/SMS*</ion-label>
+          <ion-input type="text" required [(ngModel)]="delivery.phone" name="delivery_phone" #dphone="ngModel"></ion-input>
+        </ion-item>
+        <ion-item [hidden]="dphone.valid||dphone.pristine">
+          <p>error Delivery phone number is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Delivery Address*</ion-label>
+          <ion-textarea rows="4" type="text" [(ngModel)]="delivery.address" name="delivery_address" required #address="ngModel"></ion-textarea>
+        </ion-item>
+        <ion-item [hidden]="address.valid||address.pristine">
+          <p>error delivery address is required</p>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Note</ion-label>
+          <ion-textarea rows="4" type="text" [(ngModel)]="delivery.note" name="sale_keterangan"></ion-textarea>
+        </ion-item>
+        <br>
+      </ion-item-group>
+      <button type="submit" style="float:right;margin-right:10px;margin-bottom:10px;">Order</button>
+    </form>
   </ion-list>
 </ion-content>

@@ -106,7 +106,7 @@ export class ProductsPage {
 
     this.start=1
     this.products=[]
-    this.getProducts(this.start,this.sort,this.category,this.myInput)
+    this.getProducts(this.start,this.sort,this.category,this.myInput,false)
   }
 
   //ganti kategori produk
@@ -116,7 +116,7 @@ export class ProductsPage {
     if(this.category!=undefined){
       this.start=1
       this.products=[]
-      this.getProducts(this.start,this.sort,this.category,this.myInput)
+      this.getProducts(this.start,this.sort,this.category,this.myInput,false)
     }
   }
 
