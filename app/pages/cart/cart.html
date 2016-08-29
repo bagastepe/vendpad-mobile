@@ -23,20 +23,31 @@
           <img [src]="i.product_img">
         </ion-avatar>
         <h2>{{i.product_name}}</h2>
-        <p>Rp. {{i.product_price}}</p>
-        <p>Qty : </p> <input type="number" [(ngModel)]="i.product_qty" (change)="testChange(i)"/>
-        
-        <button (click)="delete(i.product_id)" outline danger item-right><ion-icon name="trash"></ion-icon></button>
+        <p>@ Rp. {{i.product_price}}</p>
+        <div>
+          <button (click)="delete(i.product_id)" danger>Hapus <ion-icon name="trash"></ion-icon></button>
+          <div style="float:right">
+          <p style="text-align:center">Total : </p>
+          <input class="input-qty" type="number" [(ngModel)]="i.product_qty" (keyup)="onChangeInput($event,i)" min="1" style="width:50px;"/><br>
+          </div>
+        </div>
       </ion-item>
-    
+      <ion-item>
+        Total Bayar : <ion-badge item-right>Rp{{totalBayar | number:'1.2-2'}}</ion-badge> 
+      </ion-item>
     </ion-list>
-
-    <ion-buttons>
-      <button danger (click)="clearCart()">Clear</button>
-      <button primary (click)="gotoOrder()" style="float:right">Next</button>
-    </ion-buttons>
   </div>
-  
-  
-  
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar clear>
+    <ion-grid>
+      <ion-row>
+        <ion-col width-50>
+          <button full  danger  (click)="clearCart()"><ion-icon name="trash"></ion-icon>Clear</button></ion-col>
+        <ion-col width-50>
+        <button full primary  (click)="gotoOrder()"><ion-icon name="cart"></ion-icon>Lanjut</button></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

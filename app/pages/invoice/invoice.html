@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Invoice History</ion-title>
+    <ion-buttons end>
+      <button (click)="gotoCart()">
+        <ion-icon name='cart'></ion-icon>
+        <div class="total" *ngIf="totalCart&&totalCart>0">{{totalCart}}</div>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list *ngIf="orderCode&&orderCode.length>0">
+    <ion-item *ngFor="let i of orderCode">
+      <div>
+      <p><ion-icon name="calendar"></ion-icon>  {{i.tanggal | localedate:defaultLocale:'fullDate'}} <span style="float:right"> <ion-icon name="clock"></ion-icon> {{i.tanggal | date: 'HH:mm'}}</span></p>
+        
+      <!--<p><ion-icon name="calendar" secondary></ion-icon> {{i.tanggal | date: 'EEEE, d MMMM y'}} <span style="float:right"> <ion-icon name="clock"></ion-icon> {{i.tanggal | date: 'HH:mm'}}</span></p>-->
+      <!--<p><ion-icon name="clock" primary></ion-icon> {{i.tanggal | date: 'HH:mm'}}</p>-->
+      </div>
+      <div style="padding-top:10px">
+        <p class="half kode">kode invoice : <span class="invoice-code">{{i.kode}}</span></p>
+        <button class="onethird-r" style="height:30px" primary (click)="detailOrderWeb(i)">Lihat Invoice</button>
+      </div>
+    </ion-item>
+
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="canLoad" class="infinite-scroll">
+    <div class="showbox">
+      <div class="loader">
+        <svg class="spinner" width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+          <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+        </svg>
+      </div>
+    </div>
+ </ion-infinite-scroll>
+</ion-content>

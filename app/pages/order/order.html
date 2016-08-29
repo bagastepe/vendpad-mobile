@@ -1,9 +1,3 @@
-<!--
-  Generated template for the OrderPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar primary>
@@ -14,30 +8,32 @@
 
 
 <ion-content>
+  <!--<button (click)="loadUrl('http://www.google.co.id/')"></button>-->
   <ion-list>
-    <form action="">
+    <form action="" #f="ngForm" (ngSubmit)="onSubmit(f.value,f.valid)" novalidate>
       <ion-item-group>
         <ion-item-divider secondary>Customer Info</ion-item-divider>
         <ion-item>
-          <ion-label floating>Email*</ion-label>
-          <ion-input type="email" [(ngModel)]="customer.email" name="customer_email" #email="ngModel" required></ion-input>
-        </ion-item>
-        <ion-item [hidden]="email.valid||email.pristine">
-          <p>error Costumer email is required</p>
+          <ion-label floating>Email* 
+            <span [hidden]="!email.valid||(email.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="email.valid||(email.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+            </ion-label>
+          <ion-input type="email" [(ngModel)]="customer.email" name="customer_email" #email="ngModel" required
+                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label floating>Nama*</ion-label>
+          <ion-label floating>Nama* 
+            <span [hidden]="!cname.valid||(cname.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="cname.valid||(cname.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+          </ion-label>
           <ion-input type="text" [(ngModel)]="customer.name" name="customer_name" #cname="ngModel" required></ion-input>
         </ion-item>
-        <ion-item [hidden]="cname.valid||cname.pristine">
-          <p>error customer Name is required</p>
-        </ion-item>
         <ion-item>
-          <ion-label floating>Phone/SMS*</ion-label>
+          <ion-label floating>Phone/SMS*
+            <span [hidden]="!cphone.valid||(cphone.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="cphone.valid||(cphone.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+          </ion-label>
           <ion-input type="number" [(ngModel)]="customer.phone" name="customer_phone" #cphone="ngModel" required></ion-input>
-        </ion-item>
-        <ion-item [hidden]="cphone.valid||cphone.pristine">
-          <p>error Customer phone is required</p>
         </ion-item>
         <ion-item>
           <ion-label floating>Whatsapp</ion-label>
@@ -52,25 +48,25 @@
       <ion-item-group>
         <ion-item-divider secondary>Delivery Info</ion-item-divider>
         <ion-item>
-          <ion-label floating>Atas Nama*</ion-label>
+          <ion-label floating>Atas Nama* 
+            <span [hidden]="!dname.valid||(dname.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="dname.valid||(dname.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+          </ion-label>
           <ion-input type="text" required [(ngModel)]="delivery.name" name="delivery_from_name" #dname="ngModel"></ion-input>
         </ion-item>
-        <ion-item [hidden]="dname.valid||dname.pristine">
-          <p>error delivery name is required</p>
+        <ion-item>
+          <ion-label floating>Phone/SMS* 
+            <span [hidden]="!dphone.valid||(dphone.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="dphone.valid||(dphone.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+          </ion-label>
+          <ion-input type="number" required [(ngModel)]="delivery.phone" name="delivery_phone" #dphone="ngModel"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label floating>Phone/SMS*</ion-label>
-          <ion-input type="text" required [(ngModel)]="delivery.phone" name="delivery_phone" #dphone="ngModel"></ion-input>
-        </ion-item>
-        <ion-item [hidden]="dphone.valid||dphone.pristine">
-          <p>error Delivery phone number is required</p>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>Delivery Address*</ion-label>
+          <ion-label floating>Delivery Address* 
+            <span [hidden]="!address.valid||(address.pristine&&!submitted)"><ion-icon name="checkmark-circle" secondary></ion-icon></span>
+            <span [hidden]="address.valid||(address.pristine&&!submitted)"><ion-icon name="close-circle" danger></ion-icon></span>
+          </ion-label>
           <ion-textarea rows="4" type="text" [(ngModel)]="delivery.address" name="delivery_address" required #address="ngModel"></ion-textarea>
-        </ion-item>
-        <ion-item [hidden]="address.valid||address.pristine">
-          <p>error delivery address is required</p>
         </ion-item>
         <ion-item>
           <ion-label floating>Note</ion-label>

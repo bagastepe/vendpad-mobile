@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http,Headers } from '@angular/http';
 import { Vars } from '../../vars';
 import { Storage, LocalStorage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
@@ -15,21 +15,27 @@ export class Data {
   data: any;
   local;
   temp=[];
+  inv=[]
   constructor(private http: Http) {
     this.data = null;
     this.local = new Storage(LocalStorage);
   }
 
   storeProduct(product){
-    this.local.get('cart').then((data)=>{
+    return new Promise(resolve=>{
+      this.local.get('cart').then((data)=>{
       console.log("Data : "+data)
       if(data!=null){this.temp=JSON.parse(data)}
+      else{this.temp=[]}
+
+      console.log(this.temp)
 
       var isAlreadyAdded:boolean = false;
       for(let pr of this.temp){
-          if(pr.id==product.id){
+          console.log(pr.product_id+ " :: "+product.id)
+          if(pr.product_id==product.id){
             isAlreadyAdded=true;
-            pr.qty+=1;
+            pr.product_qty+=1;
           }
       }
       
@@ -42,6 +48,8 @@ export class Data {
       isAlreadyAdded=false
       console.log(this.temp);
       this.local.set('cart',JSON.stringify(this.temp));
+      resolve(true)
+    })
     })
   }
 
@@ -86,7 +94,7 @@ export class Data {
     })
   }
 
-  //Observable coba
+  //Load Products
   loadProd(page:number, sort="latest", categoryId, search){
     if (categoryId==undefined){
       categoryId="all"
@@ -101,27 +109,27 @@ export class Data {
   }
 
   //Promis
-  loadProducts(page:number, sort="latest", categoryId, search){
-    if (categoryId===undefined){
-      categoryId="all"
-    }
-    if (search===undefined){
-      search="all"
-    }
-    console.log("Data.ts page : "+page+" sort: "+sort+" categoryId: "+categoryId+" search: "+search);
-    return new Promise(resolve=>{
-      this.http.get('http://'+Vars.URL+'/public/'+Vars.SUBDOMAIN+'/product?page='+page+'&sorting='+sort+'&categories='+categoryId+'&search_name='+search)
-        .map(res=>res.json())
-        .subscribe(data=>{
-          console.log("Data.ts : konek");
-          this.data=data;
-          resolve(this.data);
-        },
-        error=>{
-          console.log("ra konek");
-        })
-    })
-  }
+  // loadProducts(page:number, sort="latest", categoryId, search){
+  //   if (categoryId===undefined){
+  //     categoryId="all"
+  //   }
+  //   if (search===undefined){
+  //     search="all"
+  //   }
+  //   console.log("Data.ts page : "+page+" sort: "+sort+" categoryId: "+categoryId+" search: "+search);
+  //   return new Promise(resolve=>{
+  //     this.http.get('http://'+Vars.URL+'/public/'+Vars.SUBDOMAIN+'/product?page='+page+'&sorting='+sort+'&categories='+categoryId+'&search_name='+search)
+  //       .map(res=>res.json())
+  //       .subscribe(data=>{
+  //         console.log("Data.ts : konek");
+  //         this.data=data;
+  //         resolve(this.data);
+  //       },
+  //       error=>{
+  //         console.log("ra konek");
+  //       })
+  //   })
+  // }
 
   loadCategories(){
     return new Promise(resolve=>{
@@ -138,26 +146,55 @@ export class Data {
     })
   }
 
-  load() {
-    if (this.data) {
-      // already loaded data
-      return Promise.resolve(this.data);
-    }
+  webOrder(detail){
+    var url = 'http://'+Vars.URL+'/public/'+Vars.SUBDOMAIN+'/web_order_mobile'
+    var params = 'order_json='+detail.order_json+'&customer_email='+detail.customer_email+'&customer_name='+detail.customer_name+'&customer_phone='+detail.customer_phone+'&customer_line='+detail.customer_line+'&customer_wa='+detail.customer_wa+'&delivery_address='+detail.delivery_address+'&delivery_from_name='+detail.delivery_from_name+'&delivery_phone='+detail.delivery_phone+'&sale_keterangan='+detail.sale_keterangan;
+    console.log(params)
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    // headers.append('Access-Control-Allow-Origin', '*');
+    return new Promise(resolve=>{
+      this.http.post(url,params,{headers:headers})
+      .map(res=>res.json())
+      .subscribe(data=>{
+        console.log("success")
+        this.data=data
+        console.log(this.data)
+        resolve(this.data)
+      },
+      error=>{
+        var err = "error"
+        resolve(err)
+        console.log("cant connect :"+error)
+        console.log(detail)
+      })
+    })
+  }
 
-    // don't have the data yet
-    return new Promise(resolve => {
-      // We're using Angular Http provider to request the data,
-      // then on the response it'll map the JSON data to a parsed JS object.
-      // Next we process the data and resolve the promise with the new data.
-      this.http.get('path/to/data.json')
-        .map(res => res.json())
-        .subscribe(data => {
-          // we've got back the raw data, now generate the core schedule data
-          // and save the data for later reference
-          this.data = data;
-          resolve(this.data);
-        });
-    });
+  getToken() {
+    
+    let token = document.querySelector('meta[name="_token"]')['content'];
+    return token;
+  }
+
+
+  storeInvoice(detail){
+    this.local.get('invoice').then((data)=>{
+      var x = data
+      console.log("Data: "+x)
+      if (data!==null){
+        console.log('not null')
+         this.inv=JSON.parse(data)
+      }
+      else{     
+        this.inv=[]
+      }
+      console.log(detail)
+      console.log(this.inv)
+      this.inv.splice(0,0,detail);
+      console.log(this.inv)
+      this.local.set('invoice',JSON.stringify(this.inv)) 
+    })
   }
 }
 

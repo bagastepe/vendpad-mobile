@@ -11,6 +11,7 @@
     <ion-buttons end>
       <button (click)="gotoCart()">
         <ion-icon name='cart'></ion-icon>
+        <div class="total" *ngIf="totalCart&&totalCart>0">{{totalCart}}</div>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -22,13 +23,14 @@
 <ion-content padding>
   <ion-img [src]="product.photo" alt="" *ngIf="!varian"></ion-img>
   <ion-img [src]="varian.photo" alt="" *ngIf="varian">  </ion-img>
+  <div class="box">
+    <ion-spinner *ngIf="varian"></ion-spinner>
+  </div>
+  
   <ion-list no-lines>
     <ion-item>
+      <h2>Deskripsi Produk</h2>
       <p>{{product.description}}</p>
-    </ion-item>
-    <ion-item>
-      <p>Harga</p>
-      <ion-badge item-right>Rp. {{product.price}}</ion-badge>
     </ion-item>
   </ion-list>
   <ion-list radio-group [(ngModel)]="varian">
@@ -45,6 +47,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar primary>
-    <button light clear block (click)="addCart()">Add to Cart</button>
+    <button light clear block (click)="addCart()"><ion-icon name="cart"></ion-icon>Tambah ke keranjang</button>
   </ion-toolbar>
 </ion-footer>

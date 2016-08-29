@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams,Storage,LocalStorage } from 'ionic-angular';
+import {CartPage} from '../cart/cart'
 
 /*
   Generated class for the CustomPage page.
@@ -12,9 +13,26 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class CustomPage {
   pageBody:any
+  local;
+  totalCart=0;
   constructor(private nav: NavController, private navParams: NavParams) {
     this.pageBody=this.navParams.get('parameter')
+    this.local=new Storage(LocalStorage)
+
+  }
+  ionViewLoaded(){
+    this.updateCartLabel()
+  }
+
+  gotoCart(){
+    this.nav.push(CartPage)
   }
 
 
+  updateCartLabel(){
+    this.local.get('cart').then(data=>{
+          if(data!=null){this.totalCart=JSON.parse(data).length}
+          else{this.totalCart=0}
+        })
+  }
 }

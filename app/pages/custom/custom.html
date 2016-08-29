@@ -11,7 +11,14 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{pageBody.title}}</ion-title>
+    <ion-buttons end>
+      <button (click)="gotoCart()">
+        <ion-icon name='cart'></ion-icon>
+        <div class="total" *ngIf="totalCart&&totalCart>0">{{totalCart}}</div>
+      </button>
+    </ion-buttons>
   </ion-navbar>
+
 
 </ion-header>
 

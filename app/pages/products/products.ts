@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController,Platform,Storage,LocalStorage } from 'ionic-angular';
 import {ProductDetailsPage} from '../product-details/product-details';
+import {InAppBrowser} from 'ionic-native';
 import {CartPage} from '../cart/cart';
 import {Data} from '../../providers/data/data';
+import {Vars} from '../../vars'
 
 /*
   Generated class for the ProductsPage page.
@@ -14,6 +16,9 @@ import {Data} from '../../providers/data/data';
   templateUrl: 'build/pages/products/products.html',
 })
 export class ProductsPage {
+  variasi
+  toko=Vars.SUBDOMAIN
+  coba=""
   myInput;
   categories;
   category;
@@ -23,19 +28,36 @@ export class ProductsPage {
   canLoad:boolean=true;
   searchVisible:boolean=false;
   search='none'
+  konek:boolean
   prod;
-  constructor(private nav: NavController,private data:Data) {
+  totalCart=0;
+  local;
+  constructor(private nav: NavController,private data:Data,private platform:Platform) {
         this.category="all"
         this.sort="latest"
+        this.konek=true
+        this.local=new Storage(LocalStorage)
+  }
+
+  onPageWillEnter(){
+    this.searchVisible=false
+    this.updateCartLabel()
+    
   }
 
   ionViewLoaded(){
+    
     this.data.loadCategories().then(data=>{
       this.categories = data;
       this.categories = this.categories.aaData;
+    },
+    error=>{
+      this.konek=false
     })
     
-    this.getProducts(this.start,this.sort,"all","none")
+    this.getProducts(this.start,this.sort,"all","none").then(()=>{
+      
+    })
 
   }
 
@@ -58,11 +80,17 @@ export class ProductsPage {
           this.canLoad=false
         }
         console.log(this.products)
+      
+        for(let p of this.products){
+          p.variasi={id:p.id,name:p.varian[0].value,photo:p.photo,price:p.price}
+          // p.variasi = p
+          // p.variasi.id=p.id
+        }
         resolve(true);
      
       },
       error=>{
-
+        this.konek=false
       })
     })    
   }
@@ -79,10 +107,12 @@ export class ProductsPage {
     );
   }
 
-  gotoDetail(p){
+  gotoDetail(e,p){
+    if(e.target.classList[0]!="select-varian"){
     this.nav.push(ProductDetailsPage,{
       details:p
     })
+    }
   }
 
   gotoCart(){
@@ -96,6 +126,9 @@ export class ProductsPage {
     else{
       this.searchVisible=true;
     }
+  }
+  test(p,e){
+    console.log(p.id)
   }
 
 
@@ -132,16 +165,42 @@ export class ProductsPage {
 
       ()=>{
         
-        console.log('search done')}
+        console.log('search done:'+this.products.length)}
     );
     
     // this.data.loadProd(this.start,this.sort,this.category,this.myInput)
   }
   //hapus search
-  onCancelSearch(){
-    this.myInput=""
-    this.getProducts(this.start,this.sort,this.category,this.myInput);
+  // onCancelSearch(e){
+  //   this.myInput=""
+  //   console.log('asdadad')
+  //   this.searchVisible=false
+  //   // this.getProducts(this.start,this.sort,this.category,this.myInput);
+  // }
+
+  //reconnect
+  reconnect(){
+    this.canLoad=true
+    this.konek=true
+    this.products=[]
+    this.data.loadCategories().then(data=>{
+      this.categories = data;
+      this.categories = this.categories.aaData;
+    },
+    error=>{
+      this.konek=false
+    })
+    this.start=1
+    this.getProducts(this.start,this.sort,"all","none",false)
   }
+
+  updateCartLabel(){
+    this.local.get('cart').then(data=>{
+          if(data!=null){this.totalCart=JSON.parse(data).length}
+          else{this.totalCart=0}
+        })
+  }
+
 
 }
 

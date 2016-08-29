@@ -1,8 +1,8 @@
 <ion-menu [content]="content">
 
   <ion-toolbar primary style="height:400px;text-align:center">
-    <img [src]="pagesOri?.data?.user?.user_img_profile" class="menu-photo" *ngIf="pagesOri?.data?.user?.user_img_profile"/>
-    <ion-title>{{pagesOri?.data?.user?.user_fullname}}</ion-title>
+    <img [src]="pagesOri?.data?.user?.user_img_profile" class="menu-photo" *ngIf="pagesOri?.data?.user?.user_img_profile" onerror="this.src='img/noimage.gif'"/>
+    <h2 class="white-text">{{pagesOri?.data?.user?.user_fullname}}</h2>
     
     <p class="white-text">{{pagesOri?.data?.user?.user_description}}</p>
     
@@ -10,18 +10,12 @@
 
   <ion-content>
     <ion-list>
-      <ion-list-header>Menu</ion-list-header>
+      <!--<ion-list-header style="background:#1F3A93;color:#fff">Menu</ion-list-header>-->
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>
     </ion-list>
   </ion-content>
-
-  <ion-footer>
-    <ion-toolbar primary>
-    <ion-title>vendpad.com</ion-title>
-    </ion-toolbar>
-  </ion-footer>
 
 </ion-menu>
 

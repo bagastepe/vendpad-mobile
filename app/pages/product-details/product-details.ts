@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams,Storage,LocalStorage } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import {Data} from '../../providers/data/data';
 import {CartPage} from '../cart/cart';
@@ -17,13 +17,20 @@ import {CartPage} from '../cart/cart';
 export class ProductDetailsPage {
   varian;
   product;
+  totalCart=0;
+  local;
   constructor(private nav: NavController, 
-              private NavParams : NavParams,
+              private navParams : NavParams,
               private toast:ToastController,
               private data: Data) 
   {
-    this.product=this.NavParams.get('details');
+    this.product=this.navParams.get('details');
     // this.varian = {id:this.product.id,name:this.product.name,varian:this.product.varian[0].value,photo:this.product.photo,price:this.product.price};
+    this.local=new Storage(LocalStorage)
+  }
+
+  onPageWillEnter(){
+    this.updateCartLabel()
   }
 
   gotoCart(){
@@ -34,8 +41,11 @@ export class ProductDetailsPage {
     if(this.varian){
       
       console.log('Varian details : '+this.varian)
-      this.data.storeProduct(this.varian)
-      this.presentToast(this.varian.name+' ditambahkan ke keranjang');
+      this.data.storeProduct(this.varian).then(()=>{
+        this.presentToast(this.varian.name+' ditambahkan ke keranjang');
+        this.updateCartLabel();
+      })
+      
       
       // console.log('product_id : '+this.varian.id+'; product_name : '+ this.varian.name+'; varian: '+this.varian.varian +'; product_image: '+this.varian.photo+'; product_price :'+this.varian.price);
     }
@@ -47,9 +57,14 @@ export class ProductDetailsPage {
   presentToast(text) {
     let toast = this.toast.create({
       message: text,
-      duration: 3000,
       showCloseButton: true
     });
     toast.present();
+  }
+
+  updateCartLabel(){
+    this.local.get('cart').then(data=>{
+          data!=null? this.totalCart=JSON.parse(data).length : this.totalCart=0
+        })
   }
 }

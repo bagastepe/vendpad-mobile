@@ -7,11 +7,10 @@
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
 
-@import "../pages/page1/page1";
-
-@import "../pages/page2/page2";
+@import "../pages/cart/cart";
 @import "../pages/product-details/product-details";
 @import "../pages/products/products";
+@import "../pages/invoice/invoice";
 
 .menu-photo{
     width:150px;

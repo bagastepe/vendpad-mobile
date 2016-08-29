@@ -10,42 +10,50 @@
     <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>PRODUCTS</ion-title>
+    <ion-title>{{toko | uppercase}}</ion-title>
     <ion-buttons end>
-      <button (click)="toggleSearch($event)">
+      <button (click)="reconnect()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button (click)="toggleSearch($event)" >
         <ion-icon name='search'></ion-icon>
       </button>
       <button  (click)=gotoCart()>
         <ion-icon name='cart'></ion-icon>
+        <div class="total" *ngIf="totalCart&&totalCart>0">{{totalCart}}</div>
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar primary>
+  <ion-toolbar light style="padding-left:0;padding-right:0">
     <ion-searchbar *ngIf="searchVisible"
+      id="searchbar"
       [(ngModel)]="myInput"
       [showCancelButton]="shouldShowCancel"
       (ionInput)="onInputSearch($event)"
       (ionCancel)="onCancelSearch($event)"
       (search)="onInputSearch($event)"
-      debounce=1500>
+      debounce=1500
+      class="search-toolbar"
+      style="background:#D2D7D3">
     </ion-searchbar> 
     
     <ion-row>
-    <ion-col width-50>
+    <ion-col width-50 class="menu-toolbar">
       <ion-item class="item-toolbar">
         <!--<ion-label *ngIf="category">{{category.name}}</ion-label>-->
         <ion-label>Category</ion-label>
-        <ion-select [(ngModel)]="category" (ionChange)="categoryProduct($event)">
+        <ion-select [(ngModel)]="category" (ionChange)="categoryProduct($event)" class="select-header">
           <ion-option value="all" selected="true">All</ion-option>
           <ion-option *ngFor="let c of categories" [value]="c.keyword_id">{{c.keyword_name}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
-    <ion-col width-50>    
+    <!--<div class="divider"></div>-->
+    <ion-col width-50 class="menu-toolbar">    
       <ion-item class="item-toolbar">
         <!--<ion-label *ngIf="sort">{{sort}}</ion-label>-->
         <ion-label>Sort By</ion-label>
-        <ion-select [(ngModel)]="sort" (ionChange)="sortProduct($event)">
+        <ion-select [(ngModel)]="sort" (ionChange)="sortProduct($event)" class="select-header">
           <ion-option value="latest">Latest</ion-option>
           <ion-option value="cheapest">Cheapest</ion-option>
           <ion-option value="expensive">Expensive</ion-option>
@@ -58,23 +66,36 @@
 </ion-header>
 
 
-<ion-content>  
-<ion-title style="height:50px;text-align:center">Product Lists</ion-title>
+<ion-content [class.pushed]="searchVisible">  
+<div *ngIf="konek">
+<!--<ion-title style="height:50px;text-align:center"></ion-title>-->
 <ion-list>
   <ion-row wrap class="nopadding">
     <ion-col width-50 *ngFor="let p of products">
-      <ion-card  (click)="gotoDetail(p)" class="card-product">
-        <img [src]="p.photo"/>
-        <ion-card-content>
-          <ion-card-title>
+      <ion-card (click)="gotoDetail($event, p)" class="card-product">
+        <ion-img [src]="p.photo" onerror="this.src='img/noimage.gif'"></ion-img>
+        <div class="box">
+          <ion-spinner></ion-spinner>
+        </div>
+        <!--<img [src]="p.photo" onerror="this.src='img/noimage.gif'"/>-->
+        <ion-card-content class="card-content">
+          <p style="padding-left:5px">
             {{p.name}}
-          </ion-card-title>
+          </p>
           <!--<p>
             {{p.description}}
           </p>-->
-          <p>
+          <p style="padding-left:5px">
             Rp {{p.price}}
           </p>
+          <!--{{p.variasi.name}}-->
+          <!--<select [(ngModel)]="p.variasi" style="width:100%;height:30px" class="select-varian" id="varian">
+            <option [value]="{id:p.id,name:p.varian[0].value,photo:p.photo,price:p.price}" disabled selected>Varian</option>
+            <option [ngValue]="{id:p.id,name:p.varian[0].value,photo:p.photo,price:p.price}" selected>{{p.varian[0].value}}</option>
+            <option *ngFor="let c of p.childs" [ngValue]="{id:c.id,name:c.varian[0].value,photo:c.photo,price:c.price}">{{c.varian[0].value}}</option>
+          
+          </select>-->
+
         </ion-card-content>
       </ion-card>
     </ion-col>  
@@ -83,22 +104,21 @@
   
 </ion-list>
 <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="canLoad" class="infinite-scroll">
-  <div class="loading">
-   <!--<svg width='42px' height='42px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-ring"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="50" cy="50" r="40" stroke-dasharray="163.36281798666926 87.9645943005142" stroke="#387ef5" fill="none" stroke-width="20"><animateTransform attributeName="transform" type="rotate" values="0 50 50;180 50 50;360 50 50;" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite" begin="0s"></animateTransform></circle></svg>-->
-   <div class="sk-circle">
-      <div class="sk-circle1 sk-child"></div>
-      <div class="sk-circle2 sk-child"></div>
-      <div class="sk-circle3 sk-child"></div>
-      <div class="sk-circle4 sk-child"></div>
-      <div class="sk-circle5 sk-child"></div>
-      <div class="sk-circle6 sk-child"></div>
-      <div class="sk-circle7 sk-child"></div>
-      <div class="sk-circle8 sk-child"></div>
-      <div class="sk-circle9 sk-child"></div>
-      <div class="sk-circle10 sk-child"></div>
-      <div class="sk-circle11 sk-child"></div>
-      <div class="sk-circle12 sk-child"></div>
-    </div>
+  <div class="showbox">
+  <div class="loader">
+    <svg class="spinner" width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+      <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+    </svg>
+  </div>
   </div>
  </ion-infinite-scroll>
+ </div>
+ <div *ngIf="!konek" style="text-align:center;padding-top:100px">
+   <ion-title>Not Connected</ion-title>
+   <br>
+   <button (click)="reconnect()">Try Again</button> 
+ </div>
+ <div *ngIf="konek&&products.length==0&&!canLoad" style="text-align:center;padding-top:100px">
+   <ion-title>No item found</ion-title> 
+ </div>
 </ion-content>

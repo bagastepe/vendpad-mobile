@@ -2,3 +2,29 @@
     float: right;
     // font-weight: 700;
 }
+
+.img-loaded + .box {
+  display:none;
+}
+
+.box{
+	position: relative;
+  background:#ecf0f1;
+	width: 100%;		/* desired width */
+}
+
+.box .spinner-crescent circle{
+  stroke: #4285F4;
+}
+
+.box:before{
+	content: "";
+	display: block;
+  padding-top:100%;
+}
+.box ion-spinner{
+	position:  absolute;
+	top: 45%;
+  left: 45%;
+  z-index: 999;
+}
